@@ -4,12 +4,17 @@ import heroImage from '../assets/hero.png'
 function HomePage() {
   return (
     <>
-      <section
-        className="hero min-h-[72svh]"
-      >
-        <div className="hero-content max-w-5xl px-4 text-left text-neutral-content">
+      <section className="hero relative min-h-[72svh] overflow-hidden bg-neutral text-neutral-content">
+        <img
+          src={heroImage}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-neutral/80" />
+
+        <div className="hero-content relative z-10 max-w-5xl px-4 text-left">
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm font-semibold uppercase text-primary-content/80">
+            <p className="mb-3 text-sm font-semibold uppercase text-neutral-content/80">
               Community gig marketplace
             </p>
             <h1 className="text-4xl font-bold leading-tight">
@@ -23,7 +28,7 @@ function HomePage() {
               <Link to="/register" className="btn btn-primary">
                 Create account
               </Link>
-              <Link to="/login" className="btn btn-outline border-white text-white hover:bg-white hover:text-neutral">
+              <Link to="/login" className="btn btn-outline btn-secondary">
                 Log in
               </Link>
             </div>
