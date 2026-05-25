@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "backend\backend.csproj", "{F914783A-EF8C-4F5F-9DAF-01A8FFFD5F73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SideKick.Api", "backend\SideKick.Api.csproj", "{F914783A-EF8C-4F5F-9DAF-01A8FFFD5F73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
