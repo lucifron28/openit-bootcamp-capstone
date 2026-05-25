@@ -3,4 +3,58 @@ services:
     image: postgres:16-alpine
     container_name: bootcamp-capstone
     restart: unless-stopped
-    
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes: 
+      - bootcamp-capstone-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s 
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bootcamp-capstone-api
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    ports:
+      - "5056:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/bin
+      - /app/obj
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"] # Update this URL to your app's actual health endpoint
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: bootcamp-capstone-client
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  bootcamp-capstone-data:
