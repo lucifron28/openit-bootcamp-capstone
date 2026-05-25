@@ -6,7 +6,7 @@ namespace SideKick.Server.Models
   {
     public int Id { get; set; }
 
-    public double AmountPaid { get; set; }
+    public required double AmountPaid { get; set; }
 
     public PaymentMethod PaymentMethod { get; set; }
 
