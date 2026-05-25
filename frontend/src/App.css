@@ -1,1 +1,13 @@
 @import "tailwindcss";
+@plugin "daisyui" {
+  themes: corporate --default, dark --prefersdark, light, cupcake, emerald, business, night;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+}
