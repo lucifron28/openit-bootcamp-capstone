@@ -27,7 +27,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     ports:
-      - "5056:80"
+      - "${DB_PORT}:5432"
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,7 +36,7 @@ services:
       - /app/bin
       - /app/obj
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/health"] # Update this URL to your app's actual health endpoint
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
       interval: 5s
       timeout: 5s
       retries: 5
