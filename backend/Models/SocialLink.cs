@@ -1,11 +1,11 @@
-namespace GigApp.Server.Models
+namespace SideKick.Server.Models
 {
   public class SocialLink
   {
     public int Id { get; set; }
 
     public int UserId { get; set; }
-    
+
     public AppUser? User { get; set; }
 
     public string Name { get; set; } = string.Empty;

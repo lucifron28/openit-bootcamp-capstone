@@ -1,4 +1,4 @@
-namespace GigApp.Server.Models
+namespace SideKick.Server.Models
 {
   public class UserSkill
   {

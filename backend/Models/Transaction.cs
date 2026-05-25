@@ -1,6 +1,6 @@
-using GigApp.Server.Enums;
+using SideKick.Server.Enums;
 
-namespace GigApp.Server.Models
+namespace SideKick.Server.Models
 {
   public class Transaction
   {

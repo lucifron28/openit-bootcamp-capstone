@@ -1,4 +1,4 @@
-using GigApp.Server.Data;
+using SideKick.Server.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

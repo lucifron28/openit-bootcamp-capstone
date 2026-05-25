@@ -1,8 +1,8 @@
-using GigApp.Server.Models;
+using SideKick.Server.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace GigApp.Server.Data {
+namespace SideKick.Server.Data {
   public class AppDbContext : IdentityDbContext<AppUser>
   {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
