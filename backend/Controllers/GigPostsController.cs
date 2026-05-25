@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SideKick.Server.DTOs;
@@ -8,6 +9,7 @@ namespace SideKick.Server.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
+  [Authorize]
   public class GigPostsController : ControllerBase
   {
     // SERVICE
