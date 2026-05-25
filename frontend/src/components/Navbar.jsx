@@ -14,7 +14,7 @@ function getStoredTheme() {
 }
 
 function Navbar() {
-  const { isAuthenticated, isLoading, logoutMutation } = useAuth()
+  const { isAuthenticated, logoutMutation } = useAuth()
   const [theme, setTheme] = useState(getStoredTheme)
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function Navbar() {
           ))}
         </select>
 
-        {!isLoading && !isAuthenticated && (
+        {!isAuthenticated && (
           <>
             <Link to="/login" className="btn btn-ghost btn-sm">
               Login
@@ -69,7 +69,7 @@ function Navbar() {
           </>
         )}
 
-        {!isLoading && isAuthenticated && (
+        {isAuthenticated && (
           <button
             type="button"
             className="btn btn-outline btn-sm"
