@@ -7,6 +7,7 @@ namespace GigApp.Server.Models
     public int UserId { get; set; }
 
     public int SkillId { get; set; }
+    public Skill? Skills { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
   }

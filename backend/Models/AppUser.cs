@@ -9,5 +9,7 @@ namespace GigApp.Server.Models
     public string LastName { get; set; } = string.Empty;
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
+    public int UserSkillId { get; set; }
+    public UserSkill? UserSkills { get; set; }
   }
 }
