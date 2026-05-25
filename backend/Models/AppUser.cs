@@ -10,8 +10,10 @@ namespace GigApp.Server.Models
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
 
-    public int UserSkillId { get; set; }
+    public List<SocialLink> SocialLinks { get; set; } = [];
 
-    public UserSkill? UserSkill { get; set; }
+    public List<UserSkill> UserSkills { get; set; } = [];
+
+    public List<GigPost> GigPosts { get; set; } = [];
   }
 }

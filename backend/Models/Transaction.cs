@@ -11,5 +11,7 @@ namespace GigApp.Server.Models
     public PaymentMethod PaymentMethod { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
+
+    public List<GigPayment> GigPayments { get; set; } = [];
   }
 }
