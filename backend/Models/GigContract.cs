@@ -7,10 +7,11 @@ namespace GigApp.Server.Models
     public int Id { get; set; }
 
     public int PostId { get; set; }
-    public GigPost? Posts { get; set; }
+
+    public GigPost? Post { get; set; }
 
     public int ApplicationId { get; set; }
-    public GigApplication? Applications { get; set; }
+    public GigApplication? Application { get; set; }
 
     public ContractStatus Status { get; set; }
     
