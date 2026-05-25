@@ -10,7 +10,7 @@ function getStoredTheme() {
     return defaultTheme
   }
 
-  return window.localStorage.getItem('gawagig-theme') || defaultTheme
+  return window.localStorage.getItem('sidekick-theme') || defaultTheme
 }
 
 function Navbar() {
@@ -19,7 +19,7 @@ function Navbar() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    window.localStorage.setItem('gawagig-theme', theme)
+    window.localStorage.setItem('sidekick-theme', theme)
   }, [theme])
 
   const linkClass = ({ isActive }) =>
@@ -29,7 +29,7 @@ function Navbar() {
     <div className="navbar sticky top-0 z-40 border-b border-base-300 bg-base-100/95 px-4 shadow-sm backdrop-blur">
       <div className="navbar-start">
         <Link to="/" className="btn btn-ghost px-2 text-xl font-bold">
-          GawaGig
+          SideKick 
         </Link>
       </div>
 
