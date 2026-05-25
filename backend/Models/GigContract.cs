@@ -1,3 +1,5 @@
+using GigApp.Server.Enums;
+
 namespace GigApp.Server.Models
 {
   public class GigContract
@@ -7,6 +9,8 @@ namespace GigApp.Server.Models
     public int PostId { get; set; }
 
     public int ApplicationId { get; set; }
+
+    public ContractStatus Status { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
   }
