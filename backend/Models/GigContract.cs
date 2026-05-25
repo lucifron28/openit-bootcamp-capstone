@@ -1,6 +1,6 @@
-using GigApp.Server.Enums;
+using SideKick.Server.Enums;
 
-namespace GigApp.Server.Models
+namespace SideKick.Server.Models
 {
   public class GigContract
   {
@@ -11,7 +11,7 @@ namespace GigApp.Server.Models
     public GigPost? Post { get; set; }
 
     public int ApplicationId { get; set; }
-    
+
     public GigApplication? Application { get; set; }
 
     public ContractStatus Status { get; set; }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace GigApp.Server.Models
+namespace SideKick.Server.Models
 {
   public class AppUser : IdentityUser
   {
@@ -15,5 +15,9 @@ namespace GigApp.Server.Models
     public List<UserSkill> UserSkills { get; set; } = [];
 
     public List<GigPost> GigPosts { get; set; } = [];
+
+    public List<GigApplication> GigApplications { get; set; } = [];
+
+
   }
 }
