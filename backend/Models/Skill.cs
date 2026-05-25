@@ -4,11 +4,11 @@ namespace SideKick.Server.Models
   {
     public int Id { get; set; }
 
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
 
     public bool IsGlobal { get; set; } = false;
 
-    public int? UserId { get; set; }
+    public string? UserId { get; set; }
 
     public AppUser? User { get; set; }
 

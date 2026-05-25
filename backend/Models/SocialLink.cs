@@ -4,13 +4,13 @@ namespace SideKick.Server.Models
   {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public required string UserId { get; set; }
 
     public AppUser? User { get; set; }
 
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
     
-    public string Href { get; set; } = string.Empty;
+    public required string Href { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
   }
