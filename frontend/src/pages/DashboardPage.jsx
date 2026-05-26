@@ -1,21 +1,26 @@
+import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 const dashboardItems = [
   {
     title: 'Browse gigs',
-    description: '',
+    description: 'See available gig posts from the community.',
+    to: '/gigs',
   },
   {
     title: 'Post a gig',
-    description: '',
+    description: 'Create a new gig post for work you need done.',
+    to: '/gigs',
   },
   {
-    title: 'My applications',
-    description: '',
+    title: 'My skills',
+    description: 'Add or remove skills from your profile.',
+    to: '/profile/skills',
   },
   {
     title: 'My profile',
-    description: '',
+    description: 'Review your account details and contact links.',
+    to: '/profile',
   },
 ]
 
@@ -40,9 +45,9 @@ function DashboardPage() {
                 <h2 className="card-title text-lg">{item.title}</h2>
                 <p className="text-sm text-base-content/70">{item.description}</p>
                 <div className="card-actions justify-end">
-                  <button type="button" className="btn btn-disabled btn-sm">
-                    {/* todo */}
-                  </button>
+                  <Link to={item.to} className="btn btn-primary btn-sm">
+                    Open
+                  </Link>
                 </div>
               </div>
             </article>

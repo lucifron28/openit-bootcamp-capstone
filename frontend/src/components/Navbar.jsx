@@ -38,9 +38,20 @@ function Navbar() {
           Home
         </NavLink>
         {isAuthenticated && (
-          <NavLink to="/dashboard" className={linkClass}>
-            Dashboard
-          </NavLink>
+          <>
+            <NavLink to="/dashboard" className={linkClass}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/gigs" className={linkClass}>
+              Gigs
+            </NavLink>
+            <NavLink to="/skills" className={linkClass}>
+              Skills
+            </NavLink>
+            <NavLink to="/profile" className={linkClass}>
+              Profile
+            </NavLink>
+          </>
         )}
       </div>
 
