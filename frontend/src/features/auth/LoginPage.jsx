@@ -16,7 +16,7 @@ function LoginPage() {
   } = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      email: location.state?.email ?? '',
       password: '',
     },
   })

@@ -4,9 +4,10 @@ import ProtectedRoute from '../components/ProtectedRoute'
 import PublicOnlyRoute from '../components/PublicOnlyRoute'
 import LoginPage from '../features/auth/LoginPage'
 import RegisterPage from '../features/auth/RegisterPage'
-import DashboardPage from '../pages/DashboardPage'
+import GigsPage from '../pages/GigsPage'
 import HomePage from '../pages/HomePage'
 import NotFoundPage from '../pages/NotFoundPage'
+import ProfilePage from '../pages/ProfilePage'
 
 function AppRouter() {
   return (
@@ -30,10 +31,18 @@ function AppRouter() {
           }
         />
         <Route
-          path="/dashboard"
+          path="/profile"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gigs"
+          element={
+            <ProtectedRoute>
+              <GigsPage />
             </ProtectedRoute>
           }
         />

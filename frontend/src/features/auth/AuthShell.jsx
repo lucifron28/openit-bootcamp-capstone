@@ -5,10 +5,10 @@ function AuthShell({ children, title, subtitle }) {
         <div className="bg-primary p-8 text-primary-content sm:p-10">
           <p className="text-sm font-semibold uppercase opacity-80">SideKick</p>
           <h1 className="mt-4 text-3xl font-bold leading-tight">
-            tagline?
+            Find work. Get help. Right in your community.
           </h1>
           <p className="mt-5 max-w-md text-base opacity-90">
-            Sign in
+            Connect with trusted neighbors for local gigs and simple tasks.
           </p>
         </div>
 

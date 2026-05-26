@@ -13,4 +13,4 @@ COPY . ./
 
 EXPOSE 8080
 
-CMD ["dotnet", "watch", "--project", "SideKick.Api.csproj", "run"]
+CMD ["dotnet", "watch", "--project", "SideKick.Api.csproj", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:8080"]
