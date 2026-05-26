@@ -12,7 +12,7 @@ namespace SideKick.Server.Services
       _context = context;
     }
 
-    public MeResponseDto? GetCurrentUserProfile(string userId)
+    public MeResponseDto? GetCurrentUserProfile(int userId)
     {
       return _context.Users
         .Where(u => u.Id == userId)
