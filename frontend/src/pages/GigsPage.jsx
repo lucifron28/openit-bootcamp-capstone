@@ -11,16 +11,12 @@ function normalize(value) {
 function GigsPage() {
   const { user } = useAuth()
   const [search, setSearch] = useState('')
-  const [localGigDetails, setLocalGigDetails] = useState({})
   const gigPostsQuery = useGigPosts()
   const createMutation = useCreateGigPost()
 
   const gigPosts = useMemo(() => {
-    return (gigPostsQuery.data ?? []).map((post) => ({
-      ...post,
-      ...localGigDetails[post.id],
-    }))
-  }, [gigPostsQuery.data, localGigDetails])
+    return gigPostsQuery.data ?? []
+  }, [gigPostsQuery.data])
 
   const searchTerm = normalize(search)
   const filteredGigPosts = gigPosts.filter((post) => {
@@ -28,7 +24,7 @@ function GigsPage() {
       return true
     }
 
-    return [post.title, post.description, post.category, post.location, post.username]
+    return [post.title, post.description, post.username, post.firstName, post.lastName]
       .map(normalize)
       .some((value) => value.includes(searchTerm))
   })
@@ -46,18 +42,7 @@ function GigsPage() {
         description: values.description,
       },
       {
-        onSuccess: (createdGig) => {
-          if (createdGig?.id) {
-            setLocalGigDetails((current) => ({
-              ...current,
-              [createdGig.id]: {
-                category: values.category,
-                location: values.location,
-                budget: values.budget,
-              },
-            }))
-          }
-
+        onSuccess: () => {
           reset()
         },
       },
@@ -89,7 +74,7 @@ function GigsPage() {
                   className="input input-bordered"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Search by title, location, or poster"
+                  placeholder="Search by title, description, or poster"
                 />
               </label>
             </div>
