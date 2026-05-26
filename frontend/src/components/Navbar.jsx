@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 const themes = ['light', 'dark', 'cupcake', 'corporate', 'emerald', 'business', 'night', 'synthwave', 'retro', 'cyberpunk', 'valentine', 'halloween', 'garden', 'forest', 'aqua', 'lofi', 'pastel', 'fantasy', 'wireframe', 'black', 'luxury', 'dracula']
+const defaultTheme = 'corporate';
 
 function getStoredTheme() {
   if (typeof window === 'undefined') {
