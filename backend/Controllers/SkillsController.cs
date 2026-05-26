@@ -40,7 +40,7 @@ namespace SideKick.Server.Controllers
       [FromBody] PostSkillDto newSkill
     )
     {
-      string userId = _userManager.GetUserId(User)!;
+      int userId = int.Parse(_userManager.GetUserId(User)!);
       var skillResponse = _skillsService.CreateSkill(userId, newSkill);
       var skillId = skillResponse.Id;
 
@@ -78,7 +78,7 @@ namespace SideKick.Server.Controllers
     [HttpGet("/assignedskills")]
     public IActionResult GetAssignedSkillsForUser()
     {
-      var userId = _userManager.GetUserId(User)!;
+      int userId = int.Parse(_userManager.GetUserId(User)!);
       var assignedSkills = _skillsService.GetAssignedSkillsForUser(userId);
       return Ok(assignedSkills);
     }
@@ -93,7 +93,7 @@ namespace SideKick.Server.Controllers
       var skill = _skillsService.GetSkillById(skillId);
       if (skill == null) return NotFound();
 
-      string userId = _userManager.GetUserId(User)!;
+      int userId = int.Parse(_userManager.GetUserId(User)!);
 
       var alreadyAssigned = _skillsService.GetAssignedSkillForUserById(userId, skillId);
       if (alreadyAssigned != null) return Conflict();
@@ -116,7 +116,7 @@ namespace SideKick.Server.Controllers
       var skill = _skillsService.GetSkillById(skillId);
       if (skill == null) return NotFound();
 
-      string userId = _userManager.GetUserId(User)!;
+      int userId = int.Parse(_userManager.GetUserId(User)!);
 
       var assigned = _skillsService.GetAssignedSkillForUserById(userId, skillId);
       if (assigned == null) return NotFound();
