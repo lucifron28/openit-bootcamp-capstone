@@ -18,6 +18,7 @@ namespace SideKick.Server.Services
         .Where(u => u.Id == userId)
         .Select(u => new MeResponseDto
           {
+            Id = u.Id,
             FirstName = u.FirstName,
             LastName = u.LastName,
             Username = u.UserName,
