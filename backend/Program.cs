@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IMeService, MeService>();
+builder.Services.AddScoped<ISocialLinkService, SocialLinkService>();
 builder.Services.AddScoped<ISkillsService, SkillsService>();
 builder.Services.AddScoped<IGigPostsService, GigPostsService>();
 
