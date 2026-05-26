@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useMySocialLinks } from '../../hooks/useSocialLinks'
 
 const optionalUrl = z
   .string()
@@ -26,7 +25,6 @@ function toDisplayLinks(links) {
 }
 
 function ProfileSocialLinks() {
-  const socialLinksQuery = useMySocialLinks()
   const [savedLinks, setSavedLinks] = useState({
     facebookUrl: '',
     messengerUrl: '',
@@ -41,7 +39,6 @@ function ProfileSocialLinks() {
     defaultValues: savedLinks,
   })
 
-  const backendLinks = socialLinksQuery.data ?? []
   const localLinks = toDisplayLinks(savedLinks)
 
   const handleSave = (values) => {
@@ -60,9 +57,13 @@ function ProfileSocialLinks() {
           <p className="text-sm text-base-content/70">Complete your profile so others can contact you.</p>
         </div>
 
+        <div className="alert">
+          <span>Social link editing is pending backend support.</span>
+        </div>
+
         {isSubmitSuccessful && (
           <div className="alert alert-success">
-            <span>Contact links draft updated.</span>
+            <span>Local contact links draft updated. This is not persisted yet.</span>
           </div>
         )}
 
@@ -105,25 +106,12 @@ function ProfileSocialLinks() {
 
           <div className="md:col-span-3 flex justify-end">
             <button type="submit" className="btn btn-primary">
-              Save links
+              Save local draft
             </button>
           </div>
         </form>
 
-        <div className="divider my-0" />
-
-        {socialLinksQuery.isLoading && <span className="loading loading-spinner text-primary" />}
-        {backendLinks.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {backendLinks.map((link) => (
-              <a key={link.id} className="badge badge-primary badge-outline" href={link.href}>
-                {link.name}
-              </a>
-            ))}
-          </div>
-        )}
-
-        {localLinks.length > 0 && (
+        {localLinks.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {localLinks.map((link) => (
               <a key={link.name} className="badge badge-outline" href={link.href}>
@@ -131,9 +119,7 @@ function ProfileSocialLinks() {
               </a>
             ))}
           </div>
-        )}
-
-        {!socialLinksQuery.isLoading && backendLinks.length === 0 && localLinks.length === 0 && (
+        ) : (
           <p className="text-sm text-base-content/70">Complete your profile so others can contact you.</p>
         )}
       </div>
