@@ -1,4 +1,4 @@
-namespace GigApp.Server.Enums
+namespace SideKick.Server.Enums
 {
   public enum PaymentMethod
   {

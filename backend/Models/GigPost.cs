@@ -1,17 +1,28 @@
-namespace GigApp.Server.Models
+using System.ComponentModel.DataAnnotations;
+using SideKick.Server.Enums;
+
+namespace SideKick.Server.Models
 {
-  public class GigPost
-  {
-    public int Id { get; set; }
+    public class GigPost
+    {
+        public int Id { get; set; }
 
-    public int UserId { get; set; }
-    
-    public AppUser? User { get; set; }
+        public int UserId { get; set; }
 
-    public string Title { get; set; } = string.Empty;
+        public AppUser? User { get; set; }
 
-    public string Description { get; set; } = string.Empty;
+        [Required]
+        [MaxLength(150)]
+        public string Title { get; set; } = string.Empty;
 
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
-  }
+        [Required]
+        [MaxLength(2000)]
+        public string Description { get; set; } = string.Empty;
+
+        public PostStatus Status { get; set; } = PostStatus.OPEN;
+
+        public List<GigApplication> Applications { get; set; } = [];
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
+    }
 }
