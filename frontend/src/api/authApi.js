@@ -1,4 +1,5 @@
 import identityApi from './identityClient'
+import { clearTokenSession, saveAccessTokenFromResponse } from './tokenSession'
 
 function normalizeEmail(email) {
   return email.trim().toLowerCase()
@@ -8,18 +9,18 @@ export async function registerUser(payload) {
   const response = await identityApi.post('/register', {
     email: normalizeEmail(payload.email),
     password: payload.password,
-  })
+  }, { skipAuthRefresh: true })
 
   return response.data
 }
 
 export async function loginUser(payload) {
-  const response = await identityApi.post('/login?useCookies=true', {
+  const response = await identityApi.post('/token/login', {
     email: normalizeEmail(payload.email),
     password: payload.password,
-  })
+  }, { skipAuthRefresh: true })
 
-  return response.data
+  return saveAccessTokenFromResponse(response.data)
 }
 
 export async function getCurrentUser() {
@@ -29,7 +30,8 @@ export async function getCurrentUser() {
 }
 
 export async function logoutUser() {
-  const response = await identityApi.post('/logout')
+  const response = await identityApi.post('/token/logout', null, { skipAuthRefresh: true })
+  clearTokenSession()
 
   return response.data
 }

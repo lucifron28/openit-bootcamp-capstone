@@ -1,20 +1,19 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from 'zustand'
 
-export const useAuthStore = create(
-  persist(
-    (set) => ({
-      accessToken: null,
-      refreshToken: null,
-      
-      setTokens: (accessToken, refreshToken) => 
-        set({ accessToken, refreshToken }),
-        
-      clearTokens: () => 
-        set({ accessToken: null, refreshToken: null }),
-    }),
-    {
-      name: 'auth-storage',
-    }
-  )
-);
+export const useAuthStore = create((set) => ({
+  accessToken: null,
+  setAccessToken: (token) => set({ accessToken: token || null }),
+  clearAccessToken: () => set({ accessToken: null }),
+}))
+
+export function getAccessToken() {
+  return useAuthStore.getState().accessToken
+}
+
+export function setAccessToken(token) {
+  useAuthStore.getState().setAccessToken(token)
+}
+
+export function clearAccessToken() {
+  useAuthStore.getState().clearAccessToken()
+}
