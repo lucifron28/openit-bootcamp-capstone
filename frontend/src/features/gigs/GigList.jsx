@@ -2,6 +2,19 @@ function getPosterName(gig) {
   return [gig.firstName, gig.lastName].filter(Boolean).join(' ') || 'SideKick user'
 }
 
+function formatStatus(status) {
+  const labels = {
+    0: 'Open',
+    1: 'In progress',
+    2: 'Completed',
+    OPEN: 'Open',
+    IN_PROGRESS: 'In progress',
+    COMPLETED: 'Completed',
+  }
+
+  return labels[status] || 'Open'
+}
+
 function formatBudget(budget) {
   if (budget === undefined || budget === null || Number.isNaN(Number(budget))) {
     return null
@@ -15,11 +28,16 @@ function formatBudget(budget) {
 }
 
 function GigList({
+  deletingId = null,
   emptyMessage,
   errorMessage = 'Could not load gigs.',
   isError = false,
   isLoading = false,
+  onDelete,
+  onEdit,
+  onView,
   posts = [],
+  showManageActions = false,
   showApplyButton = false,
 }) {
   if (isLoading) {
@@ -48,6 +66,7 @@ function GigList({
               </div>
 
               <div className="flex flex-wrap gap-2">
+                <span className="badge badge-primary badge-outline">{formatStatus(gig.status)}</span>
                 {gig.category && <span className="badge badge-outline">{gig.category}</span>}
                 {gig.location && <span className="badge badge-outline">{gig.location}</span>}
                 {budget && <span className="badge badge-primary badge-outline">{budget}</span>}
@@ -58,13 +77,33 @@ function GigList({
                 {gig.createdAt && <span>{new Date(gig.createdAt).toLocaleDateString()}</span>}
               </div>
 
-              {showApplyButton && (
-                <div className="card-actions justify-end">
+              <div className="card-actions justify-end">
+                {onView && (
+                  <button type="button" className="btn btn-primary btn-sm" onClick={() => onView(gig.id)}>
+                    View
+                  </button>
+                )}
+                {showApplyButton && (
                   <button type="button" className="btn btn-outline btn-sm" disabled>
                     Apply pending
                   </button>
-                </div>
-              )}
+                )}
+                {showManageActions && (
+                  <>
+                    <button type="button" className="btn btn-outline btn-sm" onClick={() => onEdit?.(gig)}>
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline btn-error btn-sm"
+                      onClick={() => onDelete?.(gig)}
+                      disabled={deletingId === gig.id}
+                    >
+                      {deletingId === gig.id ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </article>
         )
