@@ -23,6 +23,7 @@ builder.Services.AddScoped<IMeService, MeService>();
 builder.Services.AddScoped<ISocialLinkService, SocialLinkService>();
 builder.Services.AddScoped<ISkillsService, SkillsService>();
 builder.Services.AddScoped<IGigPostsService, GigPostsService>();
+builder.Services.AddScoped<IGigApplicationsService, GigApplicationsService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

@@ -16,6 +16,7 @@ namespace SideKick.Server.Controllers
     private readonly IMeService _meService;
     private readonly ISocialLinkService _socialLinksService;
     private readonly ISkillsService _skillsService;
+    private readonly IGigApplicationsService _gigApplicationsService;
     private readonly UserManager<AppUser> _userManager;
 
     // CONSTRUCTOR
@@ -23,12 +24,14 @@ namespace SideKick.Server.Controllers
       IMeService meService,
       ISocialLinkService socialLinksService,
       ISkillsService skillsService,
+      IGigApplicationsService gigApplicationsService,
       UserManager<AppUser> userManager
     )
     {
       _socialLinksService = socialLinksService;
       _meService = meService;
       _skillsService = skillsService;
+      _gigApplicationsService = gigApplicationsService;
       _userManager = userManager;
     }
 
@@ -142,6 +145,17 @@ namespace SideKick.Server.Controllers
 
       _skillsService.UnassignSkillFromUser(userId, skillId);
       return NoContent();
+    }
+
+    // ============= GIG APPLICATIONS =============
+
+    // GET /api/me/gigapplications
+    [HttpGet("gigapplications")]
+    public IActionResult GetGigApplicationsOfUser()
+    {
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+      var gigApplications = _gigApplicationsService.GetAllGigApplicationsOfUser(userId);
+      return Ok(gigApplications);
     }
   }
 }
