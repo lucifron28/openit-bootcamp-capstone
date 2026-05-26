@@ -17,13 +17,6 @@ const socialLinkFields = [
     aliases: ['facebookurl'],
   },
   {
-    key: 'messengerUrl',
-    name: 'Messenger',
-    label: 'Messenger URL',
-    placeholder: 'https://m.me/...',
-    aliases: ['messengerurl'],
-  },
-  {
     key: 'instagramUrl',
     name: 'Instagram',
     label: 'Instagram URL',
@@ -55,7 +48,6 @@ const optionalUrl = z
 
 const socialLinksSchema = z.object({
   facebookUrl: optionalUrl,
-  messengerUrl: optionalUrl,
   instagramUrl: optionalUrl,
   phoneNumber: z.string().trim().max(30, 'Phone number is too long.').optional(),
 })
@@ -195,9 +187,6 @@ function ProfileSocialLinks() {
       <div className="card-body gap-4">
         <div>
           <h2 className="card-title">Contact / social links</h2>
-          <p className="text-sm text-base-content/70">
-            Since the MVP has no chat, these contact links are how users can reach each other.
-          </p>
         </div>
 
         {socialLinksQuery.isLoading && <span className="loading loading-spinner text-primary" />}
