@@ -33,6 +33,26 @@ namespace SideKick.Server.Services
         .ToList();
     }
 
+    public List<GigPostResponseDto> GetAllGigPostsOfUser(int userId)
+    {
+      return _context.GigPosts
+        .Where(gp => gp.UserId == userId)
+        .Include(gp => gp.User)
+        .Select(gp => new GigPostResponseDto
+        {
+          Id = gp.Id,
+          Title = gp.Title,
+          Description = gp.Description,
+          Status = gp.Status,
+          CreatedAt = gp.CreatedAt,
+          UserId = gp.User!.Id,
+          Username = gp.User.UserName,
+          FirstName = gp.User.FirstName,
+          LastName = gp.User.LastName
+        })
+        .ToList();
+    }
+
     public GigPostResponseDto CreateGigPost(int userId, PostGigPostDto newGigPost)
     {
       var gigPost = new GigPost

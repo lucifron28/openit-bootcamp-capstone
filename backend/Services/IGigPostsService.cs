@@ -5,6 +5,7 @@ namespace SideKick.Server.Services
   public interface IGigPostsService
   {
     public List<GigPostResponseDto> GetAllGigPosts();
+    public List<GigPostResponseDto> GetAllGigPostsOfUser(int userId);
     public GigPostResponseDto CreateGigPost(int userId, PostGigPostDto gigPost);
     public GigPostResponseDto? GetGigPostById(int gigPostId);
     public GigPostResponseDto? EditGigPostById(int gigPostId, PatchGigPostDto gigPost);
