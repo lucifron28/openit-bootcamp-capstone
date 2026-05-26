@@ -1,4 +1,5 @@
 using SideKick.Server.DTOs;
+using SideKick.Server.Enums;
 
 namespace SideKick.Server.Services
 {
@@ -10,5 +11,6 @@ namespace SideKick.Server.Services
     public GigPostResponseDto? GetGigPostById(int gigPostId);
     public GigPostResponseDto? EditGigPostById(int gigPostId, PatchGigPostDto gigPost);
     public void DeleteGigPostById(int gigPostId);
+    public void UpdateGigPostStatus(int gigPostId, PostStatus status);
   }
 }

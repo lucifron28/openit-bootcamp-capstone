@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SideKick.Server.Data;
 using SideKick.Server.DTOs;
+using SideKick.Server.Enums;
 using SideKick.Server.Models;
 
 namespace SideKick.Server.Services
@@ -142,6 +143,17 @@ namespace SideKick.Server.Services
       if (gigPost == null) return;
       _context.Remove(gigPost);
       _context.SaveChanges();
-    }      
+    }
+
+    public void UpdateGigPostStatus(
+      int gigPostId,
+      PostStatus status
+    )
+    {
+      var gigPost = _context.GigPosts.FirstOrDefault(gp => gp.Id == gigPostId);
+      if (gigPost == null) return;
+      gigPost.Status = status;
+      _context.SaveChanges();
+    }
   }
 }
