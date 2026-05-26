@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import heroImage from '../assets/hero.png'
+import { useAuth } from '../hooks/useAuth'
 
 function HomePage() {
+  const { isAuthenticated } = useAuth()
+
   return (
     <>
       <section className="hero relative min-h-[72svh] overflow-hidden bg-neutral text-neutral-content">
@@ -24,14 +27,25 @@ function HomePage() {
               SideKick helps Filipinos post local tasks, discover short-term gigs,
               and apply for extra income opportunities in one simple place.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/register" className="btn btn-primary">
-                Create account
-              </Link>
-              <Link to="/login" className="btn btn-outline btn-secondary">
-                Log in
-              </Link>
-            </div>
+            {isAuthenticated ? (
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/dashboard" className="btn btn-primary">
+                  Go to dashboard
+                </Link>
+                <Link to="/gigs" className="btn btn-outline btn-secondary">
+                  Browse gigs
+                </Link>
+              </div>
+            ) : (
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/register" className="btn btn-primary">
+                  Create account
+                </Link>
+                <Link to="/login" className="btn btn-outline btn-secondary">
+                  Log in
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </section>
