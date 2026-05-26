@@ -4,14 +4,18 @@ import { getCurrentUser, loginUser, logoutUser, registerUser } from '../api/auth
 
 const authQueryKey = ['auth', 'me']
 
-export function useAuth() {
+export function useAuth({ checkCurrentUser = true } = {}) {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
   const currentUserQuery = useQuery({
     queryKey: authQueryKey,
     queryFn: getCurrentUser,
+    enabled: checkCurrentUser,
     retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
   })
 
   const loginMutation = useMutation({
@@ -42,12 +46,14 @@ export function useAuth() {
     },
   })
 
-  const user = currentUserQuery.data ?? null
+  const user = checkCurrentUser
+    ? currentUserQuery.data ?? null
+    : queryClient.getQueryData(authQueryKey) ?? null
 
   return {
     user,
     isAuthenticated: Boolean(user),
-    isLoading: currentUserQuery.isLoading,
+    isLoading: checkCurrentUser && currentUserQuery.isLoading,
     loginMutation,
     registerMutation,
     logoutMutation,

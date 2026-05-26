@@ -7,7 +7,7 @@ import AuthShell from './AuthShell'
 import { registerSchema } from './authSchemas'
 
 function RegisterPage() {
-  const { registerMutation } = useAuth()
+  const { registerMutation } = useAuth({ checkCurrentUser: false })
   const {
     register,
     handleSubmit,

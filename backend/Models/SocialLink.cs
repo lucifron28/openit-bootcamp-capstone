@@ -1,17 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SideKick.Server.Models
 {
-  public class SocialLink
-  {
-    public int Id { get; set; }
+    public class SocialLink
+    {
+        public int Id { get; set; }
 
-    public required string UserId { get; set; }
+        public int UserId { get; set; }
 
-    public AppUser? User { get; set; }
+        public AppUser? User { get; set; }
 
-    public required string Name { get; set; }
-    
-    public required string Href { get; set; }
-    
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
-  }
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        [MaxLength(300)]
+        public string Href { get; set; } = string.Empty;
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
+    }
 }

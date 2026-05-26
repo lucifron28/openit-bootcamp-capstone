@@ -8,7 +8,7 @@ import { loginSchema } from './authSchemas'
 
 function LoginPage() {
   const location = useLocation()
-  const { loginMutation } = useAuth()
+  const { loginMutation } = useAuth({ checkCurrentUser: false })
   const {
     register,
     handleSubmit,
