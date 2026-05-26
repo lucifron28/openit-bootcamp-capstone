@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using SideKick.Server.Enums;
 
 namespace SideKick.Server.Models
 {
@@ -17,6 +18,8 @@ namespace SideKick.Server.Models
         [Required]
         [MaxLength(2000)]
         public string Description { get; set; } = string.Empty;
+
+        public PostStatus Status { get; set; } = PostStatus.OPEN;
 
         public List<GigApplication> Applications { get; set; } = [];
 
