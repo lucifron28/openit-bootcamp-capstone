@@ -4,22 +4,22 @@ import { useAuth } from '../hooks/useAuth'
 const dashboardItems = [
   {
     title: 'Browse gigs',
-    description: 'See available gig posts from the community.',
-    to: '/gigs',
+    description: 'See available gig listings from the community.',
+    to: '/gigs#browse',
   },
   {
     title: 'Post a gig',
     description: 'Create a new gig post for work you need done.',
-    to: '/gigs',
+    to: '/gigs#post',
   },
   {
-    title: 'My skills',
-    description: 'Add or remove skills from your profile.',
-    to: '/profile/skills',
+    title: 'My applications',
+    description: 'Track the gigs you applied to.',
+    to: '/gigs#applications',
   },
   {
     title: 'My profile',
-    description: 'Review your account details and contact links.',
+    description: 'Review your account details, contact links, and skills.',
     to: '/profile',
   },
 ]
