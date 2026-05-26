@@ -73,56 +73,5 @@ namespace SideKick.Server.Controllers
       _skillsService.DeleteSkillById(skillId);
       return NoContent();
     }
-
-    // GET /api/me/assignedskills
-    [HttpGet("/assignedskills")]
-    public IActionResult GetAssignedSkillsForUser()
-    {
-      var userId = _userManager.GetUserId(User)!;
-      var assignedSkills = _skillsService.GetAssignedSkillsForUser(userId);
-      return Ok(assignedSkills);
-    }
-
-    // POST /api/me/assignedskills
-    [HttpPost("/assignedskills")]
-    public IActionResult AssignSkillToUser(
-      [FromBody] PostUserSkillDto newUserSkill
-    )
-    {
-      var skillId = newUserSkill.SkillId;
-      var skill = _skillsService.GetSkillById(skillId);
-      if (skill == null) return NotFound();
-
-      string userId = _userManager.GetUserId(User)!;
-
-      var alreadyAssigned = _skillsService.GetAssignedSkillForUserById(userId, skillId);
-      if (alreadyAssigned != null) return Conflict();
-
-      var userSkillReponse = _skillsService.AssignSkillToUser(userId, skillId);
-
-      return CreatedAtAction(
-        nameof(GetSkillById),
-        new { skillId = skillId },
-        userSkillReponse
-      );
-    }
-
-    // DELETE /api/me/assignedskills/{skillId}
-    [HttpDelete("/assignedskills/{skillId:int}")]
-    public IActionResult UnassignSkillFromUser(
-      int skillId
-    )
-    {
-      var skill = _skillsService.GetSkillById(skillId);
-      if (skill == null) return NotFound();
-
-      string userId = _userManager.GetUserId(User)!;
-
-      var assigned = _skillsService.GetAssignedSkillForUserById(userId, skillId);
-      if (assigned == null) return NotFound();
-
-      _skillsService.UnassignSkillFromUser(userId, skillId);
-      return NoContent();
-    }
   }
 }
