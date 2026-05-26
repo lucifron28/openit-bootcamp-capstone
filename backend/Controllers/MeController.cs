@@ -14,20 +14,25 @@ namespace SideKick.Server.Controllers
   {
     // SERVICE
     private readonly IMeService _meService;
+    private readonly ISocialLinkService _socialLinksService;
     private readonly ISkillsService _skillsService;
     private readonly UserManager<AppUser> _userManager;
 
     // CONSTRUCTOR
     public MeController(
       IMeService meService,
+      ISocialLinkService socialLinksService,
       ISkillsService skillsService,
       UserManager<AppUser> userManager
     )
     {
+      _socialLinksService = socialLinksService;
       _meService = meService;
       _skillsService = skillsService;
       _userManager = userManager;
     }
+
+    // ============= PROFILE =============
 
     // GET /api/me
     [HttpGet]
@@ -38,6 +43,54 @@ namespace SideKick.Server.Controllers
       if (user == null) return NotFound();
       return Ok(user);
     }
+
+    // ============= SOCIAL LINKS =============
+
+    // GET /api/me/sociallinks
+    [HttpGet("sociallinks")]
+    public IActionResult GetAllSocialLinksOfUser()
+    {
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+      var socialLinks = _socialLinksService.GetAllSocialLinksOfUser(userId);
+      return Ok(socialLinks);
+    }
+
+    // POST /api/me/sociallinks
+    [HttpPost("sociallinks")]
+    public IActionResult CreateSocialLink(
+      [FromBody] PostSocialLinkDto newSocialLink
+    )
+    {
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+
+      var existing = _socialLinksService.GetSocialLinkOfUserByName(userId, newSocialLink.Name);
+      if (existing != null) return Conflict();
+
+      var socialLinkReponse = _socialLinksService.CreateSocialLink(userId, newSocialLink);
+
+      return CreatedAtAction(
+        "GetSocialLinkById",
+        "SocialLinks",
+        new { socialLinkId = socialLinkReponse.Id },
+        socialLinkReponse
+      );
+    }
+
+    // DELETE /api/me/sociallinks/{socialLinkId}
+    [HttpDelete("sociallinks/{socialLinkId:int}")]
+    public IActionResult DeleteSocialLinkOfUser(
+      int socialLinkId
+    )
+    {
+      var socialLink = _socialLinksService.GetSocialLinkById(socialLinkId);
+      if (socialLink == null) return NotFound();
+
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+      _socialLinksService.DeleteSocialLinkOfUserById(userId, socialLinkId);
+      return NoContent();
+    }
+
+    // ============= SKILLS =============
 
     // GET /api/me/skills
     [HttpGet("skills")]
