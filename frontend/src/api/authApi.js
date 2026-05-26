@@ -6,7 +6,9 @@ function normalizeEmail(email) {
 }
 
 export async function registerUser(payload) {
-  const response = await identityApi.post('/register', {
+  const response = await identityApi.post('/token/register', {
+    firstName: payload.firstName.trim(),
+    lastName: payload.lastName.trim(),
     email: normalizeEmail(payload.email),
     password: payload.password,
   }, { skipAuthRefresh: true })

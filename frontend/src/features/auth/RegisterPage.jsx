@@ -15,6 +15,8 @@ function RegisterPage() {
   } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -23,6 +25,8 @@ function RegisterPage() {
 
   const onSubmit = (values) => {
     registerMutation.mutate({
+      firstName: values.firstName,
+      lastName: values.lastName,
       email: values.email,
       password: values.password,
     })
@@ -37,6 +41,38 @@ function RegisterPage() {
       )}
 
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="form-control w-full">
+            <span className="label mb-1">
+              <span className="label-text">First name</span>
+            </span>
+            <input
+              className={`input input-bordered w-full ${errors.firstName ? 'input-error' : ''}`}
+              placeholder="Juan"
+              autoComplete="given-name"
+              {...register('firstName')}
+            />
+            {errors.firstName && (
+              <span className="mt-1 text-sm text-error">{errors.firstName.message}</span>
+            )}
+          </label>
+
+          <label className="form-control w-full">
+            <span className="label mb-1">
+              <span className="label-text">Last name</span>
+            </span>
+            <input
+              className={`input input-bordered w-full ${errors.lastName ? 'input-error' : ''}`}
+              placeholder="Dela Cruz"
+              autoComplete="family-name"
+              {...register('lastName')}
+            />
+            {errors.lastName && (
+              <span className="mt-1 text-sm text-error">{errors.lastName.message}</span>
+            )}
+          </label>
+        </div>
+
         <label className="form-control w-full">
           <span className="label mb-1">
             <span className="label-text">Email</span>
