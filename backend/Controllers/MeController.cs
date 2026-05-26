@@ -16,6 +16,7 @@ namespace SideKick.Server.Controllers
     private readonly IMeService _meService;
     private readonly ISocialLinkService _socialLinksService;
     private readonly ISkillsService _skillsService;
+    private readonly IGigPostsService _gigPostsService;
     private readonly IGigApplicationsService _gigApplicationsService;
     private readonly UserManager<AppUser> _userManager;
 
@@ -24,6 +25,7 @@ namespace SideKick.Server.Controllers
       IMeService meService,
       ISocialLinkService socialLinksService,
       ISkillsService skillsService,
+      IGigPostsService gigPostsService,
       IGigApplicationsService gigApplicationsService,
       UserManager<AppUser> userManager
     )
@@ -31,6 +33,7 @@ namespace SideKick.Server.Controllers
       _socialLinksService = socialLinksService;
       _meService = meService;
       _skillsService = skillsService;
+      _gigPostsService = gigPostsService;
       _gigApplicationsService = gigApplicationsService;
       _userManager = userManager;
     }
@@ -145,6 +148,15 @@ namespace SideKick.Server.Controllers
 
       _skillsService.UnassignSkillFromUser(userId, skillId);
       return NoContent();
+    }
+
+    // ============= GIG PoSTS =============
+    [HttpGet("gigposts")]
+    public IActionResult GetGigPostsOfUser()
+    {
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+      var gigPosts = _gigPostsService.GetAllGigPostsOfUser(userId);
+      return Ok(gigPosts);
     }
 
     // ============= GIG APPLICATIONS =============
