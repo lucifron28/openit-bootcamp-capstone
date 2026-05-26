@@ -1,8 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { assignMySkill, getMe, getMySkills, removeMySkill } from '../api/meApi'
+import {
+  assignMySkill,
+  createMySocialLink,
+  deleteMySocialLink,
+  getMe,
+  getMySkills,
+  getMySocialLinks,
+  removeMySkill,
+} from '../api/meApi'
 
 export const meQueryKey = ['me']
 export const mySkillsQueryKey = ['me', 'skills']
+export const mySocialLinksQueryKey = ['me', 'socialLinks']
 
 export function useMe() {
   return useQuery({
@@ -41,10 +50,8 @@ export function useRemoveMySkill() {
 }
 
 export function useGetMySocialLinks() {
-  const queryClient = useQueryClient()
-
   return useQuery({
-    querykey: ['me', 'socialLinks'],
+    queryKey: mySocialLinksQueryKey,
     queryFn: getMySocialLinks,
   })
 }
@@ -55,8 +62,8 @@ export function useCreateMySocialLink() {
   return useMutation({
     mutationFn: createMySocialLink,
     onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['me', 'socialLinks'] })
-    }
+      queryClient.invalidateQueries({ queryKey: mySocialLinksQueryKey })
+    },
   })
 }
 
@@ -66,7 +73,7 @@ export function useDeleteMySocialLink() {
   return useMutation({
     mutationFn: deleteMySocialLink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['me', 'socialLinks'] })
-    }
+      queryClient.invalidateQueries({ queryKey: mySocialLinksQueryKey })
+    },
   })
 }

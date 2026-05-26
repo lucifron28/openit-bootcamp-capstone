@@ -1,56 +1,193 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import {
+  useCreateMySocialLink,
+  useDeleteMySocialLink,
+  useGetMySocialLinks,
+} from '../../hooks/useMe'
+
+const socialLinkFields = [
+  {
+    key: 'facebookUrl',
+    name: 'Facebook',
+    label: 'Facebook URL',
+    placeholder: 'https://facebook.com/...',
+    aliases: ['facebookurl'],
+  },
+  {
+    key: 'messengerUrl',
+    name: 'Messenger',
+    label: 'Messenger URL',
+    placeholder: 'https://m.me/...',
+    aliases: ['messengerurl'],
+  },
+  {
+    key: 'instagramUrl',
+    name: 'Instagram',
+    label: 'Instagram URL',
+    placeholder: 'https://instagram.com/...',
+    aliases: ['instagramurl'],
+  },
+  {
+    key: 'phoneNumber',
+    name: 'Phone number',
+    label: 'Phone number',
+    placeholder: '09...',
+    aliases: ['phone', 'phonenumber', 'contactnumber'],
+  },
+]
+
+const emptySocialLinks = socialLinkFields.reduce(
+  (values, field) => ({
+    ...values,
+    [field.key]: '',
+  }),
+  {},
+)
 
 const optionalUrl = z
   .string()
   .trim()
   .optional()
-  .refine((value) => !value || /^https?:\/\/\S+\.\S+/.test(value), 'Enter a valid URL.')
+  .refine((value) => !value || isHttpUrl(value), 'Enter a valid URL.')
 
 const socialLinksSchema = z.object({
   facebookUrl: optionalUrl,
   messengerUrl: optionalUrl,
   instagramUrl: optionalUrl,
-  phoneNumber: z.string().trim().optional(),
+  phoneNumber: z.string().trim().max(30, 'Phone number is too long.').optional(),
 })
 
+function isHttpUrl(value) {
+  try {
+    const url = new URL(value)
+    return ['http:', 'https:'].includes(url.protocol) && url.hostname.includes('.')
+  } catch {
+    return false
+  }
+}
+
+function normalizeName(value) {
+  return String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+}
+
+function getFieldNames(field) {
+  return new Set([field.key, field.name, ...field.aliases].map(normalizeName))
+}
+
+function getLinksForField(links, field) {
+  const fieldNames = getFieldNames(field)
+
+  return links.filter((link) => fieldNames.has(normalizeName(link.name)))
+}
+
+function trimValues(values) {
+  return socialLinkFields.reduce(
+    (trimmedValues, field) => ({
+      ...trimmedValues,
+      [field.key]: values[field.key]?.trim() ?? '',
+    }),
+    {},
+  )
+}
+
+function toFormValues(links) {
+  return socialLinkFields.reduce((values, field) => {
+    const link = getLinksForField(links, field)[0]
+
+    return {
+      ...values,
+      [field.key]: link?.href ?? '',
+    }
+  }, emptySocialLinks)
+}
+
 function toDisplayLinks(links) {
-  return Object.entries(links)
-    .filter(([, href]) => Boolean(href))
-    .map(([key, href]) => ({
-      name: key === 'phoneNumber' ? 'Phone number' : key.replace('Url', ''),
-      href,
-      isUrl: key !== 'phoneNumber',
-    }))
+  return links.map((link) => ({
+    id: link.id,
+    name: link.name,
+    href: link.href,
+    isUrl: isHttpUrl(link.href),
+    isPhoneNumber: normalizeName(link.name) === 'phonenumber',
+  }))
 }
 
 function ProfileSocialLinks() {
-  const [savedLinks, setSavedLinks] = useState({
-    facebookUrl: '',
-    messengerUrl: '',
-    instagramUrl: '',
-    phoneNumber: '',
-  })
+  const [saveMessage, setSaveMessage] = useState('')
+  const socialLinksQuery = useGetMySocialLinks()
+  const createMutation = useCreateMySocialLink()
+  const deleteMutation = useDeleteMySocialLink()
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitSuccessful },
+    reset,
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(socialLinksSchema),
-    defaultValues: savedLinks,
+    defaultValues: emptySocialLinks,
   })
 
-  const localLinks = toDisplayLinks(savedLinks)
+  const socialLinks = useMemo(() => socialLinksQuery.data ?? [], [socialLinksQuery.data])
+  const displayLinks = useMemo(() => toDisplayLinks(socialLinks), [socialLinks])
+  const isSaving = createMutation.isPending || deleteMutation.isPending
+  const isError = socialLinksQuery.isError || createMutation.isError || deleteMutation.isError
 
-  const handleSave = (values) => {
-    setSavedLinks({
-      facebookUrl: values.facebookUrl?.trim() ?? '',
-      messengerUrl: values.messengerUrl?.trim() ?? '',
-      instagramUrl: values.instagramUrl?.trim() ?? '',
-      phoneNumber: values.phoneNumber?.trim() ?? '',
+  useEffect(() => {
+    if (socialLinksQuery.data) {
+      reset(toFormValues(socialLinksQuery.data))
+    }
+  }, [reset, socialLinksQuery.data])
+
+  const handleSave = async (values) => {
+    const nextValues = trimValues(values)
+    const linksToDelete = []
+    const linksToCreate = []
+
+    setSaveMessage('')
+
+    socialLinkFields.forEach((field) => {
+      const matchingLinks = getLinksForField(socialLinks, field)
+      const nextHref = nextValues[field.key]
+      const unchanged =
+        matchingLinks.length === 1 &&
+        normalizeName(matchingLinks[0].name) === normalizeName(field.name) &&
+        matchingLinks[0].href.trim() === nextHref
+
+      if (unchanged) {
+        return
+      }
+
+      linksToDelete.push(...matchingLinks)
+
+      if (nextHref) {
+        linksToCreate.push({
+          name: field.name,
+          href: nextHref,
+        })
+      }
     })
+
+    if (linksToDelete.length === 0 && linksToCreate.length === 0) {
+      reset(nextValues)
+      setSaveMessage('Contact links are already up to date.')
+      return
+    }
+
+    for (const link of linksToDelete) {
+      await deleteMutation.mutateAsync(link.id)
+    }
+
+    for (const link of linksToCreate) {
+      await createMutation.mutateAsync(link)
+    }
+
+    reset(nextValues)
+    setSaveMessage('Contact links saved.')
   }
 
   return (
@@ -63,85 +200,67 @@ function ProfileSocialLinks() {
           </p>
         </div>
 
-        <div className="alert">
-          <span>Social link editing is pending backend support.</span>
-        </div>
-
-        {isSubmitSuccessful && (
+        {socialLinksQuery.isLoading && <span className="loading loading-spinner text-primary" />}
+        {isError && <p className="text-sm text-error">Could not update contact links.</p>}
+        {saveMessage && !isError && (
           <div className="alert alert-success">
-            <span>Local contact links draft updated. This is not persisted yet.</span>
+            <span>{saveMessage}</span>
           </div>
         )}
 
         <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" onSubmit={handleSubmit(handleSave)}>
-          <label className="form-control">
-            <span className="label-text mb-1">Facebook URL</span>
-            <input
-              className={`input input-bordered ${errors.facebookUrl ? 'input-error' : ''}`}
-              placeholder="https://facebook.com/..."
-              {...register('facebookUrl')}
-            />
-            {errors.facebookUrl && (
-              <span className="mt-1 text-sm text-error">{errors.facebookUrl.message}</span>
-            )}
-          </label>
-
-          <label className="form-control">
-            <span className="label-text mb-1">Messenger URL</span>
-            <input
-              className={`input input-bordered ${errors.messengerUrl ? 'input-error' : ''}`}
-              placeholder="https://m.me/..."
-              {...register('messengerUrl')}
-            />
-            {errors.messengerUrl && (
-              <span className="mt-1 text-sm text-error">{errors.messengerUrl.message}</span>
-            )}
-          </label>
-
-          <label className="form-control">
-            <span className="label-text mb-1">Instagram URL</span>
-            <input
-              className={`input input-bordered ${errors.instagramUrl ? 'input-error' : ''}`}
-              placeholder="https://instagram.com/..."
-              {...register('instagramUrl')}
-            />
-            {errors.instagramUrl && (
-              <span className="mt-1 text-sm text-error">{errors.instagramUrl.message}</span>
-            )}
-          </label>
-
-          <label className="form-control">
-            <span className="label-text mb-1">Phone number</span>
-            <input
-              className="input input-bordered"
-              placeholder="09..."
-              {...register('phoneNumber')}
-            />
-          </label>
+          {socialLinkFields.map((field) => (
+            <label key={field.key} className="form-control">
+              <span className="label-text mb-1">{field.label}</span>
+              <input
+                className={`input input-bordered ${errors[field.key] ? 'input-error' : ''}`}
+                placeholder={field.placeholder}
+                {...register(field.key)}
+              />
+              {errors[field.key] && (
+                <span className="mt-1 text-sm text-error">{errors[field.key].message}</span>
+              )}
+            </label>
+          ))}
 
           <div className="md:col-span-2 xl:col-span-4 flex justify-end">
-            <button type="submit" className="btn btn-primary">
-              Save local draft
+            <button type="submit" className="btn btn-primary" disabled={isSaving || socialLinksQuery.isLoading}>
+              {isSaving ? 'Saving...' : 'Save links'}
             </button>
           </div>
         </form>
 
-        {localLinks.length > 0 ? (
+        {displayLinks.length > 0 ? (
           <div className="flex flex-wrap gap-2">
-            {localLinks.map((link) => (
-              link.isUrl ? (
-                <a key={link.name} className="badge badge-outline" href={link.href}>
-                  {link.name}
-                </a>
-              ) : (
-                <span key={link.name} className="badge badge-outline">
-                  {link.name}
-                </span>
-              )
+            {displayLinks.map((link) => (
+              <span key={link.id} className="badge badge-primary badge-outline gap-2 py-3">
+                {link.isUrl ? (
+                  <a href={link.href} target="_blank" rel="noreferrer">
+                    {link.name}
+                  </a>
+                ) : (
+                  <span>{link.isPhoneNumber ? link.href : `${link.name}: ${link.href}`}</span>
+                )}
+                <button
+                  type="button"
+                  className="text-xs"
+                  onClick={() => {
+                    setSaveMessage('')
+                    deleteMutation.mutate(link.id, {
+                      onSuccess: () => setSaveMessage('Contact link removed.'),
+                    })
+                  }}
+                  disabled={deleteMutation.isPending}
+                >
+                  remove
+                </button>
+              </span>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-base-content/70">Complete your profile so others can contact you.</p>
+          !socialLinksQuery.isLoading && (
+            <p className="text-sm text-base-content/70">Complete your profile so others can contact you.</p>
+          )
         )}
       </div>
     </article>
