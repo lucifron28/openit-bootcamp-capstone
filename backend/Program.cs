@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SideKick.Server.Data;
 using SideKick.Server.Models;
+using SideKick.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,16 @@ if (string.IsNullOrWhiteSpace(connectionString))
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
+// Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IMeService, MeService>();
+builder.Services.AddScoped<ISkillsService, SkillsService>();
+builder.Services.AddScoped<IGigPostsService, GigPostsService>();
+
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<AppUser>()
@@ -29,6 +38,7 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.MigrateAsync();
 }
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -38,12 +48,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/health", () => Results.Ok("OK"));
+
 app.MapIdentityApi<AppUser>();
+
 app.MapPost("/logout", async (SignInManager<AppUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
     return Results.Ok();
 }).RequireAuthorization();
+
 app.MapControllers();
 
 app.Run();
