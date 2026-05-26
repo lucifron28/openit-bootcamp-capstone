@@ -18,6 +18,7 @@ namespace SideKick.Server.Controllers
     private readonly ISkillsService _skillsService;
     private readonly IGigPostsService _gigPostsService;
     private readonly IGigApplicationsService _gigApplicationsService;
+    private readonly IGigContractsService _gigContractsService;
     private readonly UserManager<AppUser> _userManager;
 
     // CONSTRUCTOR
@@ -27,6 +28,7 @@ namespace SideKick.Server.Controllers
       ISkillsService skillsService,
       IGigPostsService gigPostsService,
       IGigApplicationsService gigApplicationsService,
+      IGigContractsService gigContractsService,
       UserManager<AppUser> userManager
     )
     {
@@ -35,6 +37,7 @@ namespace SideKick.Server.Controllers
       _skillsService = skillsService;
       _gigPostsService = gigPostsService;
       _gigApplicationsService = gigApplicationsService;
+      _gigContractsService = gigContractsService;
       _userManager = userManager;
     }
 
@@ -168,6 +171,26 @@ namespace SideKick.Server.Controllers
       int userId = int.Parse(_userManager.GetUserId(User)!);
       var gigApplications = _gigApplicationsService.GetAllGigApplicationsOfUser(userId);
       return Ok(gigApplications);
+    }
+
+    // ============= GIG CONTRACTS =============
+
+    // GET /api/me/gigcontracts/client
+    [HttpGet("gigcontracts/client")]
+    public IActionResult GetGigContractsOfClient()
+    {
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+      var gigContracts = _gigContractsService.GetAllGigContractsOfClient(userId);
+      return Ok(gigContracts);
+    }
+
+    // GET /api/me/gigcontracts/freelancer
+    [HttpGet("gigcontracts/freelancer")]
+    public IActionResult GetGigContractsOfFreelancer()
+    {
+      int userId = int.Parse(_userManager.GetUserId(User)!);
+      var gigContracts = _gigContractsService.GetAllGigContractsOfFreelancer(userId);
+      return Ok(gigContracts);
     }
   }
 }
