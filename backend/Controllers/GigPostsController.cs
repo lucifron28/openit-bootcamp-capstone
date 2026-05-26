@@ -40,7 +40,7 @@ namespace SideKick.Server.Controllers
       [FromBody] PostGigPostDto newGigPost
     )
     {
-      string userId = _userManager.GetUserId(User)!;
+      int userId = int.Parse(_userManager.GetUserId(User)!);
       var gigPostResponse = _gigPostsService.CreateGigPost(userId, newGigPost);
       var gigPostId = gigPostResponse.Id;
 

@@ -32,7 +32,7 @@ namespace SideKick.Server.Services
         .ToList();
     }
 
-    public GigPostResponseDto CreateGigPost(string userId, PostGigPostDto newGigPost)
+    public GigPostResponseDto CreateGigPost(int userId, PostGigPostDto newGigPost)
     {
       var gigPost = new GigPost
       {

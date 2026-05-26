@@ -1,23 +1,24 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace SideKick.Server.Models
 {
-  public class AppUser : IdentityUser
-  {
-    public string FirstName { get; set; } = string.Empty;
-    
-    public string LastName { get; set; } = string.Empty;
+    public class AppUser : IdentityUser<int>
+    {
+        [MaxLength(100)]
+        public string FirstName { get; set; } = string.Empty;
 
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
+        [MaxLength(100)]
+        public string LastName { get; set; } = string.Empty;
 
-    public List<SocialLink> SocialLinks { get; set; } = [];
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
 
-    public List<UserSkill> UserSkills { get; set; } = [];
+        public List<SocialLink> SocialLinks { get; set; } = [];
 
-    public List<GigPost> GigPosts { get; set; } = [];
+        public List<UserSkill> UserSkills { get; set; } = [];
 
-    public List<GigApplication> GigApplications { get; set; } = [];
+        public List<GigPost> GigPosts { get; set; } = [];
 
-
-  }
+        public List<GigApplication> GigApplications { get; set; } = [];
+    }
 }

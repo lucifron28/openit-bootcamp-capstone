@@ -4,6 +4,6 @@ namespace SideKick.Server.Services
 {
   public interface IMeService
   {
-    public MeResponseDto? GetCurrentUserProfile(string userId);
+    public MeResponseDto? GetCurrentUserProfile(int userId);
   }
 }

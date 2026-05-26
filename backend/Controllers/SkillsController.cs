@@ -40,7 +40,7 @@ namespace SideKick.Server.Controllers
       [FromBody] PostSkillDto newSkill
     )
     {
-      string userId = _userManager.GetUserId(User)!;
+      int userId = int.Parse(_userManager.GetUserId(User)!);
       var skillResponse = _skillsService.CreateSkill(userId, newSkill);
       var skillId = skillResponse.Id;
 

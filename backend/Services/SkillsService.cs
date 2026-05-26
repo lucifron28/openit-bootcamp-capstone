@@ -28,7 +28,7 @@ namespace SideKick.Server.Services
         .ToList();
     }
 
-    public List<SkillResponseDto> GetAllSkillsOfUser(string userId)
+    public List<SkillResponseDto> GetAllSkillsOfUser(int userId)
     {
       return _context.Skills
         .Where(s => s.IsGlobal || s.UserId == userId)
@@ -43,7 +43,7 @@ namespace SideKick.Server.Services
         .ToList();
     }
 
-    public SkillResponseDto CreateSkill(string userId, PostSkillDto newSkill)
+    public SkillResponseDto CreateSkill(int userId, PostSkillDto newSkill)
     {
       var skill = new Skill
       {
@@ -93,7 +93,7 @@ namespace SideKick.Server.Services
       _context.SaveChanges();
     }
 
-    public List<SkillResponseDto> GetAssignedSkillsForUser(string userId)
+    public List<SkillResponseDto> GetAssignedSkillsForUser(int userId)
     {
       return _context.UserSkills
         .Where(us => us.UserId == userId)
@@ -110,7 +110,7 @@ namespace SideKick.Server.Services
     }
 
     public UserSkillReponseDto? GetAssignedSkillForUserById(
-      string userId,
+      int userId,
       int skillId
     )
     {
@@ -126,7 +126,7 @@ namespace SideKick.Server.Services
         .FirstOrDefault();
     }
 
-    public UserSkillReponseDto? AssignSkillToUser(string userId, int skillId)
+    public UserSkillReponseDto? AssignSkillToUser(int userId, int skillId)
     {
       var alreadyAssigned = _context.UserSkills
         .Any(us => us.UserId == userId && us.SkillId == skillId);
@@ -155,7 +155,7 @@ namespace SideKick.Server.Services
       };
     }
 
-    public void UnassignSkillFromUser(string userId, int skillId)
+    public void UnassignSkillFromUser(int userId, int skillId)
     {
       var userSkill = _context.UserSkills
         .FirstOrDefault(us => us.UserId == userId && us.SkillId == skillId);
