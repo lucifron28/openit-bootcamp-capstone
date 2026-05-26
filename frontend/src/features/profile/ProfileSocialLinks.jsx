@@ -11,7 +11,6 @@ const optionalUrl = z
 
 const socialLinksSchema = z.object({
   facebookUrl: optionalUrl,
-  messengerUrl: optionalUrl,
   instagramUrl: optionalUrl,
   phoneNumber: z.string().trim().optional(),
 })
@@ -29,7 +28,6 @@ function toDisplayLinks(links) {
 function ProfileSocialLinks() {
   const [savedLinks, setSavedLinks] = useState({
     facebookUrl: '',
-    messengerUrl: '',
     instagramUrl: '',
     phoneNumber: '',
   })
@@ -47,7 +45,6 @@ function ProfileSocialLinks() {
   const handleSave = (values) => {
     setSavedLinks({
       facebookUrl: values.facebookUrl?.trim() ?? '',
-      messengerUrl: values.messengerUrl?.trim() ?? '',
       instagramUrl: values.instagramUrl?.trim() ?? '',
       phoneNumber: values.phoneNumber?.trim() ?? '',
     })
@@ -83,18 +80,6 @@ function ProfileSocialLinks() {
             />
             {errors.facebookUrl && (
               <span className="mt-1 text-sm text-error">{errors.facebookUrl.message}</span>
-            )}
-          </label>
-
-          <label className="form-control">
-            <span className="label-text mb-1">Messenger URL</span>
-            <input
-              className={`input input-bordered ${errors.messengerUrl ? 'input-error' : ''}`}
-              placeholder="https://m.me/..."
-              {...register('messengerUrl')}
-            />
-            {errors.messengerUrl && (
-              <span className="mt-1 text-sm text-error">{errors.messengerUrl.message}</span>
             )}
           </label>
 
