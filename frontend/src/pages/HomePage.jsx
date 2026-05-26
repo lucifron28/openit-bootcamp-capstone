@@ -18,11 +18,11 @@ function HomePage() {
               Community gig marketplace
             </p>
             <h1 className="text-4xl font-bold leading-tight">
-              Find small local jobs or prepare to post work in your community.
+              Find work. Get help. Right in your community.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-neutral-content/85">
-              SideKick helps Filipinos discover short-term gigs, apply for extra income
-              opportunities, and organize future gig posts in one simple place.
+              SideKick helps Filipinos post local tasks, discover short-term gigs,
+              and apply for extra income opportunities in one simple place.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link to="/register" className="btn btn-primary">
@@ -41,22 +41,19 @@ function HomePage() {
           <div className="rounded-box border border-base-300 bg-base-200 p-5">
             <h2 className="text-lg font-semibold">Browse gigs</h2>
             <p className="mt-2 text-sm text-base-content/70">
-              {/* todo */}
-              Discover local work and apply when gig listings are connected.
+              Discover nearby work and apply for tasks that fit your time.
             </p>
           </div>
           <div className="rounded-box border border-base-300 bg-base-200 p-5">
             <h2 className="text-lg font-semibold">Post a gig</h2>
             <p className="mt-2 text-sm text-base-content/70">
-              {/* todo */}
-              Prepare an account for future posting tools after auth is ready.
+              Share what you need done and reach people in your community.
             </p>
           </div>
           <div className="rounded-box border border-base-300 bg-base-200 p-5">
             <h2 className="text-lg font-semibold">Apply simply</h2>
             <p className="mt-2 text-sm text-base-content/70">
-              {/* todo */}
-              Keep applications and profile details in one dashboard later.
+              Manage your applications and profile details from one dashboard.
             </p>
           </div>
         </div>
