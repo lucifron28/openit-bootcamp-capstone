@@ -28,11 +28,13 @@ export function useAuth({ checkCurrentUser = true } = {}) {
 
   const registerMutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      const email = variables.email.trim().toLowerCase()
+
       queryClient.resetQueries({ queryKey: authQueryKey })
       navigate('/login', {
         replace: true,
-        state: { registrationSuccess: true },
+        state: { registrationSuccess: true, email },
       })
     },
   })
