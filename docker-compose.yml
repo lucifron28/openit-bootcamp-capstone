@@ -42,6 +42,8 @@ services:
       dockerfile: Dockerfile
     container_name: bootcamp-capstone-client
     restart: unless-stopped
+    environment:
+      - VITE_API_PROXY_TARGET=http://api:8080
     ports:
       - "5173:5173"
     depends_on:

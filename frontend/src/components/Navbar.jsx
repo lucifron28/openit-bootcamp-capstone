@@ -24,24 +24,45 @@ function Navbar() {
 
   const linkClass = ({ isActive }) =>
     isActive ? 'btn btn-ghost btn-sm text-primary' : 'btn btn-ghost btn-sm'
+  const mobileLinkClass = ({ isActive }) => (isActive ? 'active font-semibold' : '')
+
+  const navLinks = [
+    { label: 'Home', to: '/', end: true, show: true },
+    { label: 'Gigs', to: '/gigs', show: isAuthenticated },
+    { label: 'Profile', to: '/profile', show: isAuthenticated },
+  ].filter((item) => item.show)
 
   return (
     <div className="navbar sticky top-0 z-40 border-b border-base-300 bg-base-100/95 px-4 shadow-sm backdrop-blur">
-      <div className="navbar-start">
+      <div className="navbar-start gap-2">
+        <div className="dropdown md:hidden">
+          <button type="button" tabIndex={0} className="btn btn-ghost btn-sm">
+            Menu
+          </button>
+          <ul
+            tabIndex={0}
+            className="menu dropdown-content z-50 mt-3 w-52 rounded-box border border-base-300 bg-base-100 p-2 shadow"
+          >
+            {navLinks.map((item) => (
+              <li key={item.to}>
+                <NavLink to={item.to} end={item.end} className={mobileLinkClass}>
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
         <Link to="/" className="btn btn-ghost px-2 text-xl font-bold">
           SideKick 
         </Link>
       </div>
 
       <div className="navbar-center hidden gap-1 md:flex">
-        <NavLink to="/" className={linkClass}>
-          Home
-        </NavLink>
-        {isAuthenticated && (
-          <NavLink to="/dashboard" className={linkClass}>
-            Dashboard
+        {navLinks.map((item) => (
+          <NavLink key={item.to} to={item.to} end={item.end} className={linkClass}>
+            {item.label}
           </NavLink>
-        )}
+        ))}
       </div>
 
       <div className="navbar-end gap-2">

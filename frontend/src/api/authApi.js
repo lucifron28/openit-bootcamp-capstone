@@ -1,31 +1,37 @@
-import api from './axiosClient'
+import identityApi from './identityClient'
+import { clearTokenSession, saveAccessTokenFromResponse } from './tokenSession'
+
+function normalizeEmail(email) {
+  return email.trim().toLowerCase()
+}
 
 export async function registerUser(payload) {
-  const response = await api.post('/register', {
-    email: payload.email,
+  const response = await identityApi.post('/register', {
+    email: normalizeEmail(payload.email),
     password: payload.password,
-  })
+  }, { skipAuthRefresh: true })
 
   return response.data
 }
 
 export async function loginUser(payload) {
-  const response = await api.post('/login?useCookies=true', {
-    email: payload.email,
+  const response = await identityApi.post('/token/login', {
+    email: normalizeEmail(payload.email),
     password: payload.password,
-  })
+  }, { skipAuthRefresh: true })
 
-  return response.data
+  return saveAccessTokenFromResponse(response.data)
 }
 
 export async function getCurrentUser() {
-  const response = await api.get('/manage/info')
+  const response = await identityApi.get('/manage/info')
 
   return response.data
 }
 
 export async function logoutUser() {
-  const response = await api.post('/logout')
+  const response = await identityApi.post('/token/logout', null, { skipAuthRefresh: true })
+  clearTokenSession()
 
   return response.data
 }
@@ -47,6 +53,10 @@ function readMessage(value) {
 }
 
 export function getApiErrorMessage(error) {
+  if (error?.response?.status === 401) {
+    return 'Invalid email or password.'
+  }
+
   const data = error?.response?.data
 
   if (!data) {
