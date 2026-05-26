@@ -39,3 +39,34 @@ export function useRemoveMySkill() {
     },
   })
 }
+
+export function useGetMySocialLinks() {
+  const queryClient = useQueryClient()
+
+  return useQuery({
+    querykey: ['me', 'socialLinks'],
+    queryFn: getMySocialLinks,
+  })
+}
+
+export function useCreateMySocialLink() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: createMySocialLink,
+    onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['me', 'socialLinks'] })
+    }
+  })
+}
+
+export function useDeleteMySocialLink() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: deleteMySocialLink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me', 'socialLinks'] })
+    }
+  })
+}
