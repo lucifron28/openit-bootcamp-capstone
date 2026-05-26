@@ -11,6 +11,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IMeService, MeService>();
+builder.Services.AddScoped<ISkillsService, SkillsService>();
 builder.Services.AddScoped<IGigPostsService, GigPostsService>();
 
 builder.Services.AddIdentityApiEndpoints<AppUser>()
@@ -32,8 +34,10 @@ app.UseHttpsRedirection();
 
 app.MapIdentityApi<AppUser>();
 
-app.MapControllers();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
