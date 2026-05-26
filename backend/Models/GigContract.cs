@@ -14,7 +14,7 @@ namespace SideKick.Server.Models
 
     public GigApplication? Application { get; set; }
 
-    public ContractStatus Status { get; set; }
+    public ContractStatus Status { get; set; } = ContractStatus.PENDING;
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now.ToUniversalTime();
   }
