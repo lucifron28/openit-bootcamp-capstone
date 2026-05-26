@@ -22,7 +22,7 @@ export function useAuth({ checkCurrentUser = true } = {}) {
     mutationFn: loginUser,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: authQueryKey })
-      navigate('/dashboard', { replace: true })
+      navigate('/gigs', { replace: true })
     },
   })
 

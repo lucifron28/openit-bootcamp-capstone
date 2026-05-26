@@ -28,7 +28,6 @@ function Navbar() {
 
   const navLinks = [
     { label: 'Home', to: '/', end: true, show: true },
-    { label: 'Dashboard', to: '/dashboard', show: isAuthenticated },
     { label: 'Gigs', to: '/gigs', show: isAuthenticated },
     { label: 'Profile', to: '/profile', show: isAuthenticated },
   ].filter((item) => item.show)

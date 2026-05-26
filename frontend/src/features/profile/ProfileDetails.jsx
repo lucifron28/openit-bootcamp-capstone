@@ -34,6 +34,14 @@ function ProfileDetails({ isError, isLoading, me }) {
                 <dd className="font-medium">{me.phoneNumber || 'Not set'}</dd>
               </div>
               <div>
+                <dt className="text-base-content/60">Location</dt>
+                <dd className="font-medium">Pending backend support</dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="text-base-content/60">Bio</dt>
+                <dd className="font-medium">Pending backend support</dd>
+              </div>
+              <div>
                 <dt className="text-base-content/60">Joined</dt>
                 <dd className="font-medium">
                   {me.createdAt ? new Date(me.createdAt).toLocaleDateString() : 'Not set'}

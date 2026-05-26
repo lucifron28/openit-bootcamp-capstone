@@ -117,7 +117,11 @@ function ProfileSkills() {
             ))}
           </div>
         ) : (
-          !mySkillsQuery.isLoading && <p className="text-sm text-base-content/70">No skills added yet.</p>
+          !mySkillsQuery.isLoading && (
+            <p className="text-sm text-base-content/70">
+              No skills added yet. Add skills so other users know what gigs fit you.
+            </p>
+          )
         )}
       </div>
     </article>

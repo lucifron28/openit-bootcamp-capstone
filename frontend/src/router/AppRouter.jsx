@@ -4,7 +4,6 @@ import ProtectedRoute from '../components/ProtectedRoute'
 import PublicOnlyRoute from '../components/PublicOnlyRoute'
 import LoginPage from '../features/auth/LoginPage'
 import RegisterPage from '../features/auth/RegisterPage'
-import DashboardPage from '../pages/DashboardPage'
 import GigsPage from '../pages/GigsPage'
 import HomePage from '../pages/HomePage'
 import NotFoundPage from '../pages/NotFoundPage'
@@ -29,14 +28,6 @@ function AppRouter() {
             <PublicOnlyRoute>
               <RegisterPage />
             </PublicOnlyRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
           }
         />
         <Route

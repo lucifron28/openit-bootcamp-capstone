@@ -13,14 +13,16 @@ const socialLinksSchema = z.object({
   facebookUrl: optionalUrl,
   messengerUrl: optionalUrl,
   instagramUrl: optionalUrl,
+  phoneNumber: z.string().trim().optional(),
 })
 
 function toDisplayLinks(links) {
   return Object.entries(links)
     .filter(([, href]) => Boolean(href))
     .map(([key, href]) => ({
-      name: key.replace('Url', ''),
+      name: key === 'phoneNumber' ? 'Phone number' : key.replace('Url', ''),
       href,
+      isUrl: key !== 'phoneNumber',
     }))
 }
 
@@ -29,6 +31,7 @@ function ProfileSocialLinks() {
     facebookUrl: '',
     messengerUrl: '',
     instagramUrl: '',
+    phoneNumber: '',
   })
   const {
     register,
@@ -46,6 +49,7 @@ function ProfileSocialLinks() {
       facebookUrl: values.facebookUrl?.trim() ?? '',
       messengerUrl: values.messengerUrl?.trim() ?? '',
       instagramUrl: values.instagramUrl?.trim() ?? '',
+      phoneNumber: values.phoneNumber?.trim() ?? '',
     })
   }
 
@@ -54,7 +58,9 @@ function ProfileSocialLinks() {
       <div className="card-body gap-4">
         <div>
           <h2 className="card-title">Contact / social links</h2>
-          <p className="text-sm text-base-content/70">Complete your profile so others can contact you.</p>
+          <p className="text-sm text-base-content/70">
+            Since the MVP has no chat, these contact links are how users can reach each other.
+          </p>
         </div>
 
         <div className="alert">
@@ -67,7 +73,7 @@ function ProfileSocialLinks() {
           </div>
         )}
 
-        <form className="grid gap-4 md:grid-cols-3" onSubmit={handleSubmit(handleSave)}>
+        <form className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" onSubmit={handleSubmit(handleSave)}>
           <label className="form-control">
             <span className="label-text mb-1">Facebook URL</span>
             <input
@@ -104,7 +110,16 @@ function ProfileSocialLinks() {
             )}
           </label>
 
-          <div className="md:col-span-3 flex justify-end">
+          <label className="form-control">
+            <span className="label-text mb-1">Phone number</span>
+            <input
+              className="input input-bordered"
+              placeholder="09..."
+              {...register('phoneNumber')}
+            />
+          </label>
+
+          <div className="md:col-span-2 xl:col-span-4 flex justify-end">
             <button type="submit" className="btn btn-primary">
               Save local draft
             </button>
@@ -114,9 +129,15 @@ function ProfileSocialLinks() {
         {localLinks.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {localLinks.map((link) => (
-              <a key={link.name} className="badge badge-outline" href={link.href}>
-                {link.name}
-              </a>
+              link.isUrl ? (
+                <a key={link.name} className="badge badge-outline" href={link.href}>
+                  {link.name}
+                </a>
+              ) : (
+                <span key={link.name} className="badge badge-outline">
+                  {link.name}
+                </span>
+              )
             ))}
           </div>
         ) : (

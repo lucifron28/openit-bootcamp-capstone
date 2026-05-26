@@ -1,5 +1,5 @@
 function getPosterName(gig) {
-  return [gig.firstName, gig.lastName].filter(Boolean).join(' ') || gig.username || 'SideKick user'
+  return [gig.firstName, gig.lastName].filter(Boolean).join(' ') || 'SideKick user'
 }
 
 function formatBudget(budget) {
@@ -61,7 +61,7 @@ function GigList({
               {showApplyButton && (
                 <div className="card-actions justify-end">
                   <button type="button" className="btn btn-outline btn-sm" disabled>
-                    Apply soon
+                    Apply pending
                   </button>
                 </div>
               )}

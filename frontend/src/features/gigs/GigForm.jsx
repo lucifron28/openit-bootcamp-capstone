@@ -5,6 +5,9 @@ import { z } from 'zod'
 const gigFormSchema = z.object({
   title: z.string().trim().min(1, 'Title is required.'),
   description: z.string().trim().min(1, 'Description is required.'),
+  category: z.string().trim().min(1, 'Category is required.'),
+  location: z.string().trim().min(1, 'Location is required.'),
+  budget: z.coerce.number().min(0, 'Budget must be 0 or greater.'),
 })
 
 function GigForm({ isSubmitting = false, onSubmit }) {
@@ -18,6 +21,9 @@ function GigForm({ isSubmitting = false, onSubmit }) {
     defaultValues: {
       title: '',
       description: '',
+      category: '',
+      location: '',
+      budget: 0,
     },
   })
 
@@ -26,6 +32,9 @@ function GigForm({ isSubmitting = false, onSubmit }) {
       {
         title: values.title.trim(),
         description: values.description.trim(),
+        category: values.category.trim(),
+        location: values.location.trim(),
+        budget: Number(values.budget),
       },
       reset,
     )
@@ -41,8 +50,12 @@ function GigForm({ isSubmitting = false, onSubmit }) {
           </p>
         </div>
 
-        <div className="grid gap-4">
-          <label className="form-control">
+        <div className="alert">
+          <span>Category, location, and budget are ready in the UI and pending backend support.</span>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="form-control md:col-span-2">
             <span className="label-text mb-1">Title</span>
             <input
               className={`input input-bordered ${errors.title ? 'input-error' : ''}`}
@@ -52,7 +65,7 @@ function GigForm({ isSubmitting = false, onSubmit }) {
             {errors.title && <span className="mt-1 text-sm text-error">{errors.title.message}</span>}
           </label>
 
-          <label className="form-control">
+          <label className="form-control md:col-span-2">
             <span className="label-text mb-1">Description</span>
             <textarea
               className={`textarea textarea-bordered min-h-28 ${errors.description ? 'textarea-error' : ''}`}
@@ -61,6 +74,50 @@ function GigForm({ isSubmitting = false, onSubmit }) {
             />
             {errors.description && (
               <span className="mt-1 text-sm text-error">{errors.description.message}</span>
+            )}
+          </label>
+
+          <label className="form-control">
+            <span className="label-text mb-1">Category</span>
+            <select
+              className={`select select-bordered ${errors.category ? 'select-error' : ''}`}
+              {...register('category')}
+            >
+              <option value="">Choose a category</option>
+              <option value="Cleaning">Cleaning</option>
+              <option value="Errands">Errands</option>
+              <option value="Tutoring">Tutoring</option>
+              <option value="Basic services">Basic services</option>
+              <option value="Other">Other</option>
+            </select>
+            {errors.category && (
+              <span className="mt-1 text-sm text-error">{errors.category.message}</span>
+            )}
+          </label>
+
+          <label className="form-control">
+            <span className="label-text mb-1">Location</span>
+            <input
+              className={`input input-bordered ${errors.location ? 'input-error' : ''}`}
+              placeholder="Barangay, city, or area"
+              {...register('location')}
+            />
+            {errors.location && (
+              <span className="mt-1 text-sm text-error">{errors.location.message}</span>
+            )}
+          </label>
+
+          <label className="form-control">
+            <span className="label-text mb-1">Budget</span>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              className={`input input-bordered ${errors.budget ? 'input-error' : ''}`}
+              {...register('budget')}
+            />
+            {errors.budget && (
+              <span className="mt-1 text-sm text-error">{errors.budget.message}</span>
             )}
           </label>
         </div>
